@@ -1,0 +1,1 @@
+widget representa cada elemento visual da tela no flutter  m
