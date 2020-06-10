@@ -14,10 +14,10 @@ class BytebankApp extends StatelessWidget {
 }
 
 class FormularioTransferencia extends StatelessWidget {
-  final TextEditingController _editingControllerNumeroConta =
+  final TextEditingController _controladorCampoNumeroConta =
       TextEditingController();
 
-  final TextEditingController _editingControllerValor = TextEditingController();
+  final TextEditingController _controladorCampoValor = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -27,46 +27,58 @@ class FormularioTransferencia extends StatelessWidget {
         ),
         body: Column(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                controller: _editingControllerNumeroConta,
-                style: TextStyle(fontSize: 24.0),
-                decoration: InputDecoration(
-                    labelText: 'Número da Conta',
-                    icon: Icon(Icons.info),
-                    hintText: '0000'),
-                keyboardType: TextInputType.number,
-              ),
+            Editor(
+              controlador: _controladorCampoNumeroConta,
+              rotulo: 'Número da conta',
+              dica: '0000',
+              /*icone: Icons.info*/
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                controller: _editingControllerValor,
-                style: TextStyle(fontSize: 24.0),
-                decoration: InputDecoration(
-                    icon: Icon(Icons.monetization_on),
-                    labelText: 'valor',
-                    hintText: '0.00'),
-                keyboardType: TextInputType.number,
-              ),
-            ),
+            Editor(
+                icone: Icons.monetization_on,
+                controlador: _controladorCampoValor,
+                rotulo: 'valor',
+                dica: '0.00'),
             RaisedButton(
               child: Text('Confirmar'),
-              onPressed: () {
-                debugPrint('clicou no botão confirmar !!!');
-                final int numeroConta = int.tryParse(_editingControllerNumeroConta.text);
-                final double valor = double.tryParse(_editingControllerValor.text);
-
-                if (numeroConta != null && valor != null) {
-                final transferenciaCriada =  Transferencia(valor, numeroConta);
-
-                debugPrint('$transferenciaCriada');
-                }
-              },
+              onPressed: () => _criaTransferencia(),
             ),
           ],
         ));
+  }
+
+  void _criaTransferencia() {
+    final int numeroConta = int.tryParse(_controladorCampoNumeroConta.text);
+    final double valor = double.tryParse(_controladorCampoValor.text);
+    if (numeroConta != null && valor != null) {
+      final transferenciaCriada = Transferencia(valor, numeroConta);
+      debugPrint('$transferenciaCriada');
+    }
+  }
+}
+
+class Editor extends StatelessWidget {
+  final TextEditingController controlador;
+  final String rotulo;
+  final String dica;
+  final IconData icone;
+
+  Editor({this.controlador, this.rotulo, this.dica, this.icone});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: TextField(
+        controller: controlador,
+        style: TextStyle(fontSize: 24.0),
+        decoration: InputDecoration(
+          labelText: rotulo,
+          hintText: dica,
+          icon: icone != null ? Icon(icone) : null,
+        ),
+        keyboardType: TextInputType.number,
+      ),
+    );
   }
 }
 

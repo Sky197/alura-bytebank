@@ -1,1 +1,6 @@
-widget representa cada elemento visual da tela no flutter  m
+widget representa cada elemento visual da tela no flutter ;
+
+
+###Declaração de construtor com variaveis opcional, as variaveis não podem ser privadaas
+######Ex.: Editor({this.controlador, this.rotulo, this.dica, this.icone});
+https://cursos.alura.com.br/course/flutter-fundamentos/task/61430
