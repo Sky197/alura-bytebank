@@ -7,7 +7,7 @@ class BytebankApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: FormularioTransferencia(),
+        body: ListaTransferencia(),
       ),
     );
   }
@@ -40,18 +40,20 @@ class FormularioTransferencia extends StatelessWidget {
                 dica: '0.00'),
             RaisedButton(
               child: Text('Confirmar'),
-              onPressed: () => _criaTransferencia(),
+              onPressed: () => _criaTransferencia(context),
             ),
           ],
         ));
   }
 
-  void _criaTransferencia() {
+  void _criaTransferencia(BuildContext context) {
     final int numeroConta = int.tryParse(_controladorCampoNumeroConta.text);
     final double valor = double.tryParse(_controladorCampoValor.text);
     if (numeroConta != null && valor != null) {
       final transferenciaCriada = Transferencia(valor, numeroConta);
+      debugPrint('Criando Transferencia');
       debugPrint('$transferenciaCriada');
+      Navigator.pop(context, transferenciaCriada);
     }
   }
 }
@@ -99,8 +101,17 @@ class ListaTransferencia extends StatelessWidget {
         title: Text('Transferencias'),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-      ),
+          child: Icon(Icons.add),
+          onPressed: () {
+            final Future<Transferencia> future =
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return FormularioTransferencia();
+            }));
+            future.then((transferenciaRecebida) {
+              debugPrint('chegou no ---> future.then');
+              debugPrint('$transferenciaRecebida');
+            });
+          }),
     );
   }
 }
