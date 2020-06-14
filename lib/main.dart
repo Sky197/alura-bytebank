@@ -6,9 +6,15 @@ class BytebankApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: ListaTransferencia(),
+
+      theme: ThemeData (
+        primaryColor: Colors.grey[900],
+        accentColor: Colors.lightGreenAccent[100],
+        buttonTheme: ButtonThemeData (
+         buttonColor: Colors.lightGreenAccent[100]
+        )
       ),
+      home:  ListaTransferencia(),
     );
   }
 }
@@ -40,6 +46,7 @@ class FormularioTransferenciaState extends State<FormularioTransferencia> {
             children: <Widget>[
               Editor(
                 controlador: _controladorCampoNumeroConta,
+                icone: Icons.info,
                 rotulo: 'Número da conta',
                 dica: '0000',
                 /*icone: Icons.info*/
