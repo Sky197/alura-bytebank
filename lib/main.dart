@@ -13,10 +13,10 @@ class BytebankApp extends StatelessWidget {
   }
 }
 
+//Tela de criar transferencia
 class FormularioTransferencia extends StatelessWidget {
   final TextEditingController _controladorCampoNumeroConta =
       TextEditingController();
-
   final TextEditingController _controladorCampoValor = TextEditingController();
 
   @override
@@ -84,22 +84,29 @@ class Editor extends StatelessWidget {
   }
 }
 
-class ListaTransferencia extends StatelessWidget {
+class ListaTransferencia extends StatefulWidget {
+  final List<Transferencia> _transferencias = List();
+
+  @override
+  State<StatefulWidget> createState() {
+    return ListaTransferenciasState();
+  }
+}
+
+//Tela de transferencias feitas
+class ListaTransferenciasState extends State<ListaTransferencia> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          ItemTransferencia(Transferencia(2555.00, 0033)),
-          ItemTransferencia(Transferencia(2555.00, 0033)),
-          ItemTransferencia(Transferencia(2555.00, 0033)),
-          ItemTransferencia(Transferencia(2555.00, 0033)),
-        ],
-      ),
       appBar: AppBar(
         title: Text('Transferencias'),
       ),
+      body: ListView.builder(
+          itemCount: widget._transferencias.length,
+          itemBuilder: (context, indice) {
+            final transferencia = widget._transferencias[indice];
+            return ItemTransferencia(transferencia);
+          }),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
@@ -110,6 +117,8 @@ class ListaTransferencia extends StatelessWidget {
             future.then((transferenciaRecebida) {
               debugPrint('chegou no ---> future.then');
               debugPrint('$transferenciaRecebida');
+              widget._transferencias.add(transferenciaRecebida);
+              setState(() {});
             });
           }),
     );
@@ -132,6 +141,7 @@ class ItemTransferencia extends StatelessWidget {
   ItemTransferencia(this._transferencia);
 }
 
+//Modelo
 class Transferencia {
   final double valor;
   final int numeroConta;
