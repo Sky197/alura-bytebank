@@ -13,38 +13,10 @@ class BytebankApp extends StatelessWidget {
   }
 }
 
-//Tela de criar transferencia
-class FormularioTransferencia extends StatelessWidget {
+class FormularioTransferenciaState extends State<FormularioTransferencia> {
   final TextEditingController _controladorCampoNumeroConta =
       TextEditingController();
   final TextEditingController _controladorCampoValor = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Criando Transferencia'),
-        ),
-        body: Column(
-          children: <Widget>[
-            Editor(
-              controlador: _controladorCampoNumeroConta,
-              rotulo: 'Número da conta',
-              dica: '0000',
-              /*icone: Icons.info*/
-            ),
-            Editor(
-                icone: Icons.monetization_on,
-                controlador: _controladorCampoValor,
-                rotulo: 'valor',
-                dica: '0.00'),
-            RaisedButton(
-              child: Text('Confirmar'),
-              onPressed: () => _criaTransferencia(context),
-            ),
-          ],
-        ));
-  }
 
   void _criaTransferencia(BuildContext context) {
     final int numeroConta = int.tryParse(_controladorCampoNumeroConta.text);
@@ -55,6 +27,43 @@ class FormularioTransferencia extends StatelessWidget {
       debugPrint('$transferenciaCriada');
       Navigator.pop(context, transferenciaCriada);
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Criando Transferencia'),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Editor(
+                controlador: _controladorCampoNumeroConta,
+                rotulo: 'Número da conta',
+                dica: '0000',
+                /*icone: Icons.info*/
+              ),
+              Editor(
+                  icone: Icons.monetization_on,
+                  controlador: _controladorCampoValor,
+                  rotulo: 'valor',
+                  dica: '0.00'),
+              RaisedButton(
+                child: Text('Confirmar'),
+                onPressed: () => _criaTransferencia(context),
+              ),
+            ],
+          ),
+        ));
+  }
+}
+
+//Tela de criar transferencia
+class FormularioTransferencia extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return FormularioTransferenciaState();
   }
 }
 
@@ -115,10 +124,17 @@ class ListaTransferenciasState extends State<ListaTransferencia> {
               return FormularioTransferencia();
             }));
             future.then((transferenciaRecebida) {
-              debugPrint('chegou no ---> future.then');
-              debugPrint('$transferenciaRecebida');
-              widget._transferencias.add(transferenciaRecebida);
-              setState(() {});
+              Future.delayed(Duration(seconds: 3), () {
+                debugPrint('chegou no ---> future.then');
+                debugPrint('$transferenciaRecebida');
+                if (transferenciaRecebida != null) {
+                  setState(() {
+                    widget._transferencias.add(transferenciaRecebida);
+                  });
+                }
+              });
+
+//              setState(() {});
             });
           }),
     );
