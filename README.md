@@ -1,4 +1,4 @@
-# bytebank
+# flutter_fundamentos
 
 A new Flutter project.
 
