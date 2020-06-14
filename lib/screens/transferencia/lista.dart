@@ -1,7 +1,8 @@
 import 'package:bytebank/models/transferencia.dart';
 import 'package:flutter/material.dart';
-
 import 'formulario.dart';
+
+const _tituloAppBar = 'Transferencias';
 
 class ListaTransferencia extends StatefulWidget {
   final List<Transferencia> _transferencias = List();
@@ -12,13 +13,12 @@ class ListaTransferencia extends StatefulWidget {
   }
 }
 
-//Tela de transferencias feitas
 class ListaTransferenciasState extends State<ListaTransferencia> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Transferencias'),
+        title: Text(_tituloAppBar),
       ),
       body: ListView.builder(
           itemCount: widget._transferencias.length,
@@ -29,25 +29,23 @@ class ListaTransferenciasState extends State<ListaTransferencia> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            final Future<Transferencia> future =
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return FormularioTransferencia();
-            }));
-            future.then((transferenciaRecebida) {
-              Future.delayed(Duration(seconds: 3), () {
-                debugPrint('chegou no ---> future.then');
-                debugPrint('$transferenciaRecebida');
-                if (transferenciaRecebida != null) {
-                  setState(() {
-                    widget._transferencias.add(transferenciaRecebida);
-                  });
-                }
-              });
-
-//              setState(() {});
-            });
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) {
+                return FormularioTransferencia();
+              }),
+            ).then((transferenciaRecebida) =>
+                _atualizaTransferencia(transferenciaRecebida));
           }),
     );
+  }
+
+  void _atualizaTransferencia(Transferencia transferenciaRecebida) {
+    if (transferenciaRecebida != null) {
+      setState(() {
+        widget._transferencias.add(transferenciaRecebida);
+      });
+    }
   }
 }
 
